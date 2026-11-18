@@ -38,7 +38,7 @@ HISTORICAL_ACTIVITY_FILE = (
 )
 
 ACTIVITY_MODEL_FILE = (
-    PROJECT_DIR / "models" / "wakasafe_historical_activity_model.pkl"
+    PROJECT_DIR / "backend" / "models" / "wakasafe_historical_activity_model.pkl"
 )
 roads_df = pd.read_csv(ROADS_FILE)
 # LOAD HISTORICAL ACTIVITY MODEL
