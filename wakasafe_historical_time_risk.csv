@@ -1,0 +1,178 @@
+State,Location_Route,Time_of_Day,Incident_Count,Total_Fatalities,Total_Injuries,Average_Fatalities,Average_Injuries,Historical_Activity_Score,Historical_Activity_Level
+Enugu,Enugu-Onitsha Expressway,Afternoon,27,36,83,1.3333333333333333,3.074074074074074,99.7,Higher
+Anambra,Ihiala-Orlu Road,Afternoon,27,50,84,1.8518518518518519,3.111111111111111,99.7,Higher
+Imo,Owerri-Umuahia Road,Afternoon,23,38,67,1.6521739130434783,2.9130434782608696,98.9,Higher
+Anambra,Enugu-Port Harcourt Expressway,Afternoon,22,29,69,1.3181818181818181,3.1363636363636362,98.0,Higher
+Anambra,Awka-Ekwulobia Road,Afternoon,22,27,51,1.2272727272727273,2.3181818181818183,98.0,Higher
+Anambra,Nnewi-Okigwe Road,Afternoon,21,29,82,1.380952380952381,3.9047619047619047,97.2,Higher
+Enugu,Enugu-Abakaliki Expressway,Afternoon,20,22,48,1.1,2.4,96.0,Higher
+Anambra,Owerri-Onitsha Road,Afternoon,20,30,59,1.5,2.95,96.0,Higher
+Enugu,Nnewi-Okigwe Road,Afternoon,20,19,39,0.95,1.95,96.0,Higher
+Anambra,Enugu-Port Harcourt Expressway,Morning,19,27,63,1.4210526315789473,3.3157894736842106,94.4,Higher
+Anambra,Enugu-Abakaliki Expressway,Morning,19,15,47,0.7894736842105263,2.473684210526316,94.4,Higher
+Enugu,Ihiala-Orlu Road,Afternoon,19,23,52,1.2105263157894737,2.736842105263158,94.4,Higher
+Anambra,Umuahia-Ikot Ekpene Road,Afternoon,18,18,47,1.0,2.611111111111111,92.4,Higher
+Enugu,Owerri-Umuahia Road,Afternoon,18,25,53,1.3888888888888888,2.9444444444444446,92.4,Higher
+Anambra,Enugu-Onitsha Expressway,Afternoon,18,38,56,2.111111111111111,3.111111111111111,92.4,Higher
+Anambra,Owerri-Umuahia Road,Afternoon,18,24,57,1.3333333333333333,3.1666666666666665,92.4,Higher
+Imo,Enugu-Onitsha Expressway,Evening,17,22,47,1.2941176470588236,2.764705882352941,90.4,Higher
+Imo,Awka-Ekwulobia Road,Afternoon,17,28,59,1.6470588235294117,3.4705882352941178,90.4,Higher
+Imo,Enugu-Onitsha Expressway,Morning,17,23,52,1.3529411764705883,3.0588235294117645,90.4,Higher
+Imo,Okigwe-Uturu Road,Morning,16,23,47,1.4375,2.9375,87.3,Higher
+Abia,Owerri-Umuahia Road,Afternoon,16,19,53,1.1875,3.3125,87.3,Higher
+Enugu,Awka-Ekwulobia Road,Morning,16,13,31,0.8125,1.9375,87.3,Higher
+Enugu,Okigwe-Uturu Road,Afternoon,16,15,36,0.9375,2.25,87.3,Higher
+Imo,Enugu-Port Harcourt Expressway,Afternoon,16,15,48,0.9375,3.0,87.3,Higher
+Imo,Enugu-Port Harcourt Expressway,Evening,16,15,42,0.9375,2.625,87.3,Higher
+Anambra,Enugu-Onitsha Expressway,Evening,16,12,32,0.75,2.0,87.3,Higher
+Anambra,Owerri-Onitsha Road,Evening,16,17,42,1.0625,2.625,87.3,Higher
+Anambra,Okigwe-Uturu Road,Afternoon,15,21,32,1.4,2.1333333333333333,82.8,Higher
+Enugu,Enugu-Port Harcourt Expressway,Afternoon,15,9,25,0.6,1.6666666666666667,82.8,Higher
+Enugu,Umuahia-Ikot Ekpene Road,Afternoon,15,21,51,1.4,3.4,82.8,Higher
+Imo,Enugu-Abakaliki Expressway,Night,15,17,41,1.1333333333333333,2.7333333333333334,82.8,Higher
+Imo,Enugu-Port Harcourt Expressway,Morning,15,19,40,1.2666666666666666,2.6666666666666665,82.8,Higher
+Anambra,Enugu-Abakaliki Expressway,Evening,15,29,44,1.9333333333333333,2.933333333333333,82.8,Higher
+Abia,Nnewi-Okigwe Road,Afternoon,15,20,42,1.3333333333333333,2.8,82.8,Higher
+Abia,Owerri-Onitsha Road,Afternoon,15,12,40,0.8,2.6666666666666665,82.8,Higher
+Imo,Owerri-Onitsha Road,Evening,14,18,39,1.2857142857142858,2.7857142857142856,77.4,Higher
+Enugu,Enugu-Onitsha Expressway,Evening,14,20,49,1.4285714285714286,3.5,77.4,Higher
+Anambra,Okigwe-Uturu Road,Night,14,18,59,1.2857142857142858,4.214285714285714,77.4,Higher
+Imo,Owerri-Umuahia Road,Evening,14,22,40,1.5714285714285714,2.857142857142857,77.4,Higher
+Enugu,Umuahia-Ikot Ekpene Road,Morning,14,15,37,1.0714285714285714,2.642857142857143,77.4,Higher
+Enugu,Awka-Ekwulobia Road,Afternoon,14,21,41,1.5,2.9285714285714284,77.4,Higher
+Abia,Ihiala-Orlu Road,Afternoon,14,15,37,1.0714285714285714,2.642857142857143,77.4,Higher
+Imo,Umuahia-Ikot Ekpene Road,Afternoon,14,22,41,1.5714285714285714,2.9285714285714284,77.4,Higher
+Imo,Enugu-Onitsha Expressway,Afternoon,14,15,40,1.0714285714285714,2.857142857142857,77.4,Higher
+Enugu,Ihiala-Orlu Road,Evening,14,15,33,1.0714285714285714,2.357142857142857,77.4,Higher
+Anambra,Enugu-Abakaliki Expressway,Afternoon,14,18,45,1.2857142857142858,3.2142857142857144,77.4,Higher
+Enugu,Owerri-Onitsha Road,Afternoon,13,14,34,1.0769230769230769,2.6153846153846154,69.5,Moderate
+Enugu,Enugu-Onitsha Expressway,Morning,13,9,33,0.6923076923076923,2.5384615384615383,69.5,Moderate
+Enugu,Enugu-Abakaliki Expressway,Morning,13,20,51,1.5384615384615385,3.923076923076923,69.5,Moderate
+Enugu,Nnewi-Okigwe Road,Evening,13,16,30,1.2307692307692308,2.3076923076923075,69.5,Moderate
+Enugu,Nnewi-Okigwe Road,Morning,13,27,44,2.076923076923077,3.3846153846153846,69.5,Moderate
+Abia,Awka-Ekwulobia Road,Evening,13,21,59,1.6153846153846154,4.538461538461538,69.5,Moderate
+Anambra,Nnewi-Okigwe Road,Night,13,8,26,0.6153846153846154,2.0,69.5,Moderate
+Abia,Okigwe-Uturu Road,Evening,13,12,29,0.9230769230769231,2.230769230769231,69.5,Moderate
+Imo,Owerri-Onitsha Road,Morning,13,16,37,1.2307692307692308,2.8461538461538463,69.5,Moderate
+Enugu,Enugu-Abakaliki Expressway,Evening,13,25,45,1.9230769230769231,3.4615384615384617,69.5,Moderate
+Anambra,Ihiala-Orlu Road,Morning,13,10,22,0.7692307692307693,1.6923076923076923,69.5,Moderate
+Imo,Owerri-Onitsha Road,Afternoon,13,10,33,0.7692307692307693,2.5384615384615383,69.5,Moderate
+Anambra,Awka-Ekwulobia Road,Evening,13,14,33,1.0769230769230769,2.5384615384615383,69.5,Moderate
+Anambra,Awka-Ekwulobia Road,Morning,13,10,27,0.7692307692307693,2.076923076923077,69.5,Moderate
+Abia,Ihiala-Orlu Road,Evening,13,33,48,2.5384615384615383,3.6923076923076925,69.5,Moderate
+Anambra,Enugu-Port Harcourt Expressway,Evening,13,22,43,1.6923076923076923,3.3076923076923075,69.5,Moderate
+Enugu,Okigwe-Uturu Road,Morning,13,13,31,1.0,2.3846153846153846,69.5,Moderate
+Imo,Umuahia-Ikot Ekpene Road,Evening,12,12,31,1.0,2.5833333333333335,60.7,Moderate
+Enugu,Enugu-Port Harcourt Expressway,Evening,12,16,35,1.3333333333333333,2.9166666666666665,60.7,Moderate
+Imo,Enugu-Abakaliki Expressway,Morning,12,10,21,0.8333333333333334,1.75,60.7,Moderate
+Enugu,Enugu-Port Harcourt Expressway,Morning,12,9,34,0.75,2.8333333333333335,60.7,Moderate
+Abia,Owerri-Onitsha Road,Morning,12,17,35,1.4166666666666667,2.9166666666666665,60.7,Moderate
+Enugu,Awka-Ekwulobia Road,Evening,12,16,40,1.3333333333333333,3.3333333333333335,60.7,Moderate
+Abia,Ihiala-Orlu Road,Morning,12,14,27,1.1666666666666667,2.25,60.7,Moderate
+Imo,Nnewi-Okigwe Road,Afternoon,12,11,30,0.9166666666666666,2.5,60.7,Moderate
+Abia,Umuahia-Ikot Ekpene Road,Afternoon,12,5,25,0.4166666666666667,2.0833333333333335,60.7,Moderate
+Imo,Ihiala-Orlu Road,Morning,12,10,36,0.8333333333333334,3.0,60.7,Moderate
+Imo,Ihiala-Orlu Road,Afternoon,12,19,48,1.5833333333333333,4.0,60.7,Moderate
+Anambra,Awka-Ekwulobia Road,Night,12,8,24,0.6666666666666666,2.0,60.7,Moderate
+Anambra,Enugu-Onitsha Expressway,Morning,12,21,43,1.75,3.5833333333333335,60.7,Moderate
+Enugu,Ihiala-Orlu Road,Morning,12,15,29,1.25,2.4166666666666665,60.7,Moderate
+Imo,Umuahia-Ikot Ekpene Road,Morning,11,14,32,1.2727272727272727,2.909090909090909,53.4,Moderate
+Imo,Nnewi-Okigwe Road,Night,11,17,28,1.5454545454545454,2.5454545454545454,53.4,Moderate
+Enugu,Owerri-Umuahia Road,Morning,11,9,34,0.8181818181818182,3.090909090909091,53.4,Moderate
+Abia,Enugu-Port Harcourt Expressway,Afternoon,11,12,36,1.0909090909090908,3.272727272727273,53.4,Moderate
+Ebonyi,Awka-Ekwulobia Road,Evening,11,15,35,1.3636363636363635,3.1818181818181817,53.4,Moderate
+Abia,Enugu-Onitsha Expressway,Afternoon,11,14,27,1.2727272727272727,2.4545454545454546,53.4,Moderate
+Enugu,Owerri-Onitsha Road,Evening,11,16,34,1.4545454545454546,3.090909090909091,53.4,Moderate
+Abia,Enugu-Abakaliki Expressway,Evening,11,11,24,1.0,2.1818181818181817,53.4,Moderate
+Anambra,Umuahia-Ikot Ekpene Road,Morning,11,4,13,0.36363636363636365,1.1818181818181819,53.4,Moderate
+Anambra,Okigwe-Uturu Road,Evening,11,7,19,0.6363636363636364,1.7272727272727273,53.4,Moderate
+Abia,Enugu-Port Harcourt Expressway,Evening,11,10,24,0.9090909090909091,2.1818181818181817,53.4,Moderate
+Abia,Owerri-Umuahia Road,Morning,11,19,42,1.7272727272727273,3.8181818181818183,53.4,Moderate
+Abia,Okigwe-Uturu Road,Afternoon,10,14,24,1.4,2.4,45.2,Moderate
+Ebonyi,Umuahia-Ikot Ekpene Road,Evening,10,25,48,2.5,4.8,45.2,Moderate
+Enugu,Enugu-Onitsha Expressway,Night,10,12,23,1.2,2.3,45.2,Moderate
+Anambra,Owerri-Umuahia Road,Evening,10,14,31,1.4,3.1,45.2,Moderate
+Ebonyi,Nnewi-Okigwe Road,Afternoon,10,14,33,1.4,3.3,45.2,Moderate
+Enugu,Okigwe-Uturu Road,Evening,10,12,23,1.2,2.3,45.2,Moderate
+Ebonyi,Enugu-Abakaliki Expressway,Morning,10,11,28,1.1,2.8,45.2,Moderate
+Imo,Enugu-Abakaliki Expressway,Afternoon,10,19,31,1.9,3.1,45.2,Moderate
+Anambra,Umuahia-Ikot Ekpene Road,Evening,10,18,41,1.8,4.1,45.2,Moderate
+Abia,Owerri-Onitsha Road,Evening,10,14,30,1.4,3.0,45.2,Moderate
+Anambra,Owerri-Onitsha Road,Morning,10,11,26,1.1,2.6,45.2,Moderate
+Anambra,Okigwe-Uturu Road,Morning,10,9,23,0.9,2.3,45.2,Moderate
+Abia,Enugu-Port Harcourt Expressway,Morning,10,19,34,1.9,3.4,45.2,Moderate
+Anambra,Nnewi-Okigwe Road,Evening,10,18,36,1.8,3.6,45.2,Moderate
+Imo,Nnewi-Okigwe Road,Morning,10,9,19,0.9,1.9,45.2,Moderate
+Imo,Nnewi-Okigwe Road,Evening,10,13,33,1.3,3.3,45.2,Moderate
+Abia,Awka-Ekwulobia Road,Afternoon,10,21,35,2.1,3.5,45.2,Moderate
+Enugu,Owerri-Onitsha Road,Morning,9,6,21,0.6666666666666666,2.3333333333333335,35.9,Lower
+Imo,Okigwe-Uturu Road,Evening,9,17,36,1.8888888888888888,4.0,35.9,Lower
+Imo,Enugu-Port Harcourt Expressway,Night,9,7,17,0.7777777777777778,1.8888888888888888,35.9,Lower
+Ebonyi,Ihiala-Orlu Road,Afternoon,9,20,37,2.2222222222222223,4.111111111111111,35.9,Lower
+Abia,Owerri-Umuahia Road,Evening,9,11,22,1.2222222222222223,2.4444444444444446,35.9,Lower
+Abia,Enugu-Onitsha Expressway,Evening,9,12,31,1.3333333333333333,3.4444444444444446,35.9,Lower
+Ebonyi,Ihiala-Orlu Road,Evening,9,8,18,0.8888888888888888,2.0,35.9,Lower
+Abia,Okigwe-Uturu Road,Morning,9,13,21,1.4444444444444444,2.3333333333333335,35.9,Lower
+Abia,Nnewi-Okigwe Road,Morning,9,9,32,1.0,3.5555555555555554,35.9,Lower
+Anambra,Enugu-Abakaliki Expressway,Night,9,2,17,0.2222222222222222,1.8888888888888888,35.9,Lower
+Abia,Enugu-Onitsha Expressway,Morning,9,6,22,0.6666666666666666,2.4444444444444446,35.9,Lower
+Abia,Umuahia-Ikot Ekpene Road,Evening,9,10,28,1.1111111111111112,3.111111111111111,35.9,Lower
+Anambra,Nnewi-Okigwe Road,Morning,9,4,14,0.4444444444444444,1.5555555555555556,35.9,Lower
+Anambra,Owerri-Onitsha Road,Night,9,7,20,0.7777777777777778,2.2222222222222223,35.9,Lower
+Anambra,Owerri-Umuahia Road,Morning,9,13,32,1.4444444444444444,3.5555555555555554,35.9,Lower
+Anambra,Owerri-Umuahia Road,Night,9,10,22,1.1111111111111112,2.4444444444444446,35.9,Lower
+Ebonyi,Enugu-Port Harcourt Expressway,Afternoon,8,6,19,0.75,2.375,27.1,Lower
+Abia,Umuahia-Ikot Ekpene Road,Morning,8,14,27,1.75,3.375,27.1,Lower
+Ebonyi,Enugu-Onitsha Expressway,Evening,8,7,24,0.875,3.0,27.1,Lower
+Ebonyi,Awka-Ekwulobia Road,Afternoon,8,11,20,1.375,2.5,27.1,Lower
+Enugu,Owerri-Umuahia Road,Evening,8,9,27,1.125,3.375,27.1,Lower
+Imo,Enugu-Abakaliki Expressway,Evening,8,21,39,2.625,4.875,27.1,Lower
+Anambra,Umuahia-Ikot Ekpene Road,Night,8,17,28,2.125,3.5,27.1,Lower
+Ebonyi,Ihiala-Orlu Road,Morning,8,14,26,1.75,3.25,27.1,Lower
+Abia,Enugu-Port Harcourt Expressway,Night,8,11,27,1.375,3.375,27.1,Lower
+Imo,Owerri-Onitsha Road,Night,8,8,22,1.0,2.75,27.1,Lower
+Ebonyi,Owerri-Onitsha Road,Evening,8,1,7,0.125,0.875,27.1,Lower
+Ebonyi,Owerri-Umuahia Road,Afternoon,8,17,28,2.125,3.5,27.1,Lower
+Imo,Owerri-Umuahia Road,Morning,8,12,30,1.5,3.75,27.1,Lower
+Ebonyi,Umuahia-Ikot Ekpene Road,Afternoon,8,6,11,0.75,1.375,27.1,Lower
+Abia,Enugu-Abakaliki Expressway,Afternoon,8,11,28,1.375,3.5,27.1,Lower
+Abia,Owerri-Umuahia Road,Night,7,8,29,1.1428571428571428,4.142857142857143,18.1,Lower
+Abia,Okigwe-Uturu Road,Night,7,12,24,1.7142857142857142,3.4285714285714284,18.1,Lower
+Imo,Ihiala-Orlu Road,Evening,7,7,24,1.0,3.4285714285714284,18.1,Lower
+Anambra,Enugu-Onitsha Expressway,Night,7,13,20,1.8571428571428572,2.857142857142857,18.1,Lower
+Anambra,Ihiala-Orlu Road,Night,7,9,17,1.2857142857142858,2.4285714285714284,18.1,Lower
+Abia,Enugu-Abakaliki Expressway,Morning,7,10,23,1.4285714285714286,3.2857142857142856,18.1,Lower
+Imo,Awka-Ekwulobia Road,Morning,7,3,13,0.42857142857142855,1.8571428571428572,18.1,Lower
+Imo,Umuahia-Ikot Ekpene Road,Night,7,7,21,1.0,3.0,18.1,Lower
+Ebonyi,Nnewi-Okigwe Road,Evening,7,5,14,0.7142857142857143,2.0,18.1,Lower
+Ebonyi,Enugu-Onitsha Expressway,Morning,7,2,14,0.2857142857142857,2.0,18.1,Lower
+Enugu,Enugu-Port Harcourt Expressway,Night,7,8,19,1.1428571428571428,2.7142857142857144,18.1,Lower
+Enugu,Nnewi-Okigwe Road,Night,7,11,26,1.5714285714285714,3.7142857142857144,18.1,Lower
+Ebonyi,Enugu-Port Harcourt Expressway,Morning,7,8,15,1.1428571428571428,2.142857142857143,18.1,Lower
+Ebonyi,Owerri-Umuahia Road,Night,7,16,34,2.2857142857142856,4.857142857142857,18.1,Lower
+Ebonyi,Enugu-Onitsha Expressway,Afternoon,7,7,13,1.0,1.8571428571428572,18.1,Lower
+Ebonyi,Enugu-Abakaliki Expressway,Afternoon,7,5,17,0.7142857142857143,2.4285714285714284,18.1,Lower
+Enugu,Umuahia-Ikot Ekpene Road,Evening,7,3,15,0.42857142857142855,2.142857142857143,18.1,Lower
+Anambra,Enugu-Port Harcourt Expressway,Night,6,10,20,1.6666666666666667,3.3333333333333335,11.0,Lower
+Abia,Ihiala-Orlu Road,Night,6,3,11,0.5,1.8333333333333333,11.0,Lower
+Anambra,Ihiala-Orlu Road,Evening,6,6,16,1.0,2.6666666666666665,11.0,Lower
+Ebonyi,Awka-Ekwulobia Road,Night,6,5,22,0.8333333333333334,3.6666666666666665,11.0,Lower
+Ebonyi,Owerri-Umuahia Road,Morning,6,3,13,0.5,2.1666666666666665,11.0,Lower
+Ebonyi,Owerri-Onitsha Road,Morning,6,13,23,2.1666666666666665,3.8333333333333335,11.0,Lower
+Ebonyi,Awka-Ekwulobia Road,Morning,6,5,13,0.8333333333333334,2.1666666666666665,11.0,Lower
+Ebonyi,Okigwe-Uturu Road,Night,6,8,15,1.3333333333333333,2.5,11.0,Lower
+Abia,Awka-Ekwulobia Road,Morning,5,6,10,1.2,2.0,4.5,Lower
+Ebonyi,Umuahia-Ikot Ekpene Road,Morning,5,9,15,1.8,3.0,4.5,Lower
+Imo,Owerri-Umuahia Road,Night,5,9,16,1.8,3.2,4.5,Lower
+Ebonyi,Owerri-Onitsha Road,Afternoon,5,5,14,1.0,2.8,4.5,Lower
+Enugu,Enugu-Abakaliki Expressway,Night,5,2,7,0.4,1.4,4.5,Lower
+Abia,Nnewi-Okigwe Road,Evening,5,11,21,2.2,4.2,4.5,Lower
+Ebonyi,Okigwe-Uturu Road,Evening,5,14,23,2.8,4.6,4.5,Lower
+Abia,Nnewi-Okigwe Road,Night,5,6,11,1.2,2.2,4.5,Lower
+Imo,Okigwe-Uturu Road,Afternoon,5,4,8,0.8,1.6,4.5,Lower
+Enugu,Umuahia-Ikot Ekpene Road,Night,5,0,3,0.0,0.6,4.5,Lower
+Ebonyi,Enugu-Onitsha Expressway,Night,5,5,16,1.0,3.2,4.5,Lower
+Enugu,Okigwe-Uturu Road,Night,5,2,6,0.4,1.2,4.5,Lower
+Enugu,Owerri-Onitsha Road,Night,5,3,7,0.6,1.4,4.5,Lower
+Ebonyi,Enugu-Abakaliki Expressway,Evening,5,1,8,0.2,1.6,4.5,Lower
+Enugu,Awka-Ekwulobia Road,Night,5,6,14,1.2,2.8,4.5,Lower
