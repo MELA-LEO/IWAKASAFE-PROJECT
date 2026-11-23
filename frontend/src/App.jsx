@@ -27,12 +27,6 @@ const navigation = [
   { name: "Moderator", icon: Settings },
 ];
 
-const incidents = [
-  { type: "Road accident", location: "Enugu–Port Harcourt Expressway", time: "Recently reported", level: "High", status: "Under review" },
-  { type: "Traffic congestion", location: "Aba–Umuahia Road", time: "Today", level: "Medium", status: "Verified" },
-  { type: "Road hazard", location: "Owerri–Onitsha Road", time: "Today", level: "Medium", status: "Verified" },
-];
-
 function SectionTitle({ title, subtitle, action }) {
   return (
     <div className="section-title">
@@ -45,7 +39,68 @@ function SectionTitle({ title, subtitle, action }) {
   );
 }
 
+/* ==================================================
+   LIVE COMMUNITY REPORTS
+================================================== */
+
+function useCommunityReports() {
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  async function loadReports() {
+    try {
+      const response = await fetch(`${API_BASE}/api/reports`);
+
+      if (!response.ok) {
+        throw new Error("Unable to retrieve community reports.");
+      }
+
+      const data = await response.json();
+
+      const activeReports = (data.reports || []).filter(
+        report => report.verification_status !== "Rejected"
+      );
+
+      setReports(activeReports);
+      setError("");
+    } catch (err) {
+      setError(err.message || "Unable to retrieve community reports.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadReports();
+
+    const interval = setInterval(loadReports, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return {
+    reports,
+    loading,
+    error,
+    refreshReports: loadReports
+  };
+}
+
+/* ==================================================
+   DASHBOARD
+================================================== */
+
 function Dashboard({ navigate, summary }) {
+  const {
+    reports,
+    loading,
+    error,
+    refreshReports
+  } = useCommunityReports();
+
+  const recentReports = reports.slice(0, 3);
+
   return (
     <>
       <div className="welcome-banner">
@@ -57,6 +112,7 @@ function Dashboard({ navigate, summary }) {
             Plan a journey <ArrowUpRight size={17} />
           </button>
         </div>
+
         <div className="banner-art">
           <div className="radar radar-one"></div>
           <div className="radar radar-two"></div>
@@ -71,18 +127,21 @@ function Dashboard({ navigate, summary }) {
           <strong>{summary ? Number(summary.road_assessments ?? 0).toLocaleString() : "Loading..."}</strong>
           <small>Historical road-risk records</small>
         </div>
+
         <div className="stat-card">
           <div className="stat-icon orange"><AlertTriangle/></div>
           <span>Recorded incidents</span>
           <strong>{summary ? Number(summary.incident_records ?? 0).toLocaleString() : "Loading..."}</strong>
           <small>Represented in the historical dataset</small>
         </div>
+
         <div className="stat-card">
           <div className="stat-icon green"><ShieldCheck/></div>
           <span>Very-high-risk roads</span>
           <strong>{summary ? Number(summary.very_high_risk_roads ?? 0).toLocaleString() : "Loading..."}</strong>
           <small>Based on historical risk assessment</small>
         </div>
+
         <div className="stat-card">
           <div className="stat-icon blue"><Activity/></div>
           <span>Road reference records</span>
@@ -95,49 +154,95 @@ function Dashboard({ navigate, summary }) {
         <div className="panel recent-panel">
           <SectionTitle
             title="Recent road updates"
-            subtitle="A preview of the incident feed"
+            subtitle="Latest community-reported road incidents"
             action={
               <button className="text-button" onClick={() => navigate("Alerts & Updates")}>
                 View all <ChevronRight size={15}/>
               </button>
             }
           />
-          {incidents.map((item, i) => (
-            <div className="incident-row" key={i}>
-              <div className={`incident-symbol ${item.level.toLowerCase()}`}>
-                <AlertTriangle size={18}/>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+            <button className="text-button" onClick={refreshReports}>
+              <Activity size={14}/> Refresh
+            </button>
+          </div>
+
+          {loading && (
+            <p className="demo-note">Loading community reports...</p>
+          )}
+
+          {error && (
+            <p className="demo-note">{error}</p>
+          )}
+
+          {!loading && !error && recentReports.length === 0 && (
+            <p className="demo-note">
+              No community road reports available yet.
+            </p>
+          )}
+
+          {recentReports.map(report => {
+            const isVerified =
+              report.verification_status === "Verified";
+
+            return (
+              <div className="incident-row" key={report.id}>
+                <div className="incident-symbol">
+                  <AlertTriangle size={18}/>
+                </div>
+
+                <div className="incident-info">
+                  <strong>{report.incident_type}</strong>
+
+                  <span>
+                    <MapPin size={13}/> {report.location_route}
+                  </span>
+
+                  <small>
+                    {report.state} • {report.incident_date}
+                    {report.incident_time
+                      ? ` • ${report.incident_time}`
+                      : ""}
+                  </small>
+                </div>
+
+                <span className={`status-pill ${isVerified ? "verified" : "review"}`}>
+                  {isVerified ? "Verified" : "Under review"}
+                </span>
               </div>
-              <div className="incident-info">
-                <strong>{item.type}</strong>
-                <span><MapPin size={13}/> {item.location}</span>
-                <small><Clock size={12}/> {item.time}</small>
-              </div>
-              <span className={`status-pill ${item.status === "Verified" ? "verified" : "review"}`}>
-                {item.status}
-              </span>
-            </div>
-          ))}
-          <p className="demo-note">Illustrative sample entries — not live road reports.</p>
+            );
+          })}
+
+          <p className="demo-note">
+            Community reports are displayed according to their verification status.
+            Reports that have been rejected are excluded.
+          </p>
         </div>
 
         <div className="panel quick-panel">
           <SectionTitle title="Quick actions" subtitle="What would you like to do?" />
+
           <button className="quick-action" onClick={() => navigate("Safety Map")}>
             <span className="quick-icon"><Map size={18}/></span>
             <span><b>Explore safety map</b><small>View mapped road information</small></span>
             <ChevronRight/>
           </button>
+
           <button className="quick-action" onClick={() => navigate("Report Incident")}>
             <span className="quick-icon"><PlusCircle size={18}/></span>
             <span><b>Report an incident</b><small>Share a road safety concern</small></span>
             <ChevronRight/>
           </button>
-          
         </div>
       </div>
     </>
   );
 }
+
+/* ==================================================
+   MAP RECENTER
+================================================== */
 
 function MapRecenter({ position }) {
   const map = useMap();
@@ -150,6 +255,10 @@ function MapRecenter({ position }) {
 
   return null;
 }
+
+/* ==================================================
+   SAFETY MAP
+================================================== */
 
 function SafetyMap() {
   const [roads, setRoads] = useState([]);
@@ -293,6 +402,7 @@ function SafetyMap() {
           {userPosition && (
             <>
               <MapRecenter position={[userPosition[0], userPosition[1]]}/>
+
               <Circle
                 center={[userPosition[0], userPosition[1]]}
                 radius={userPosition[2]}
@@ -302,6 +412,7 @@ function SafetyMap() {
                   fillOpacity:0.12
                 }}
               />
+
               <CircleMarker
                 center={[userPosition[0], userPosition[1]]}
                 radius={9}
@@ -346,6 +457,10 @@ function SafetyMap() {
     </div>
   );
 }
+
+/* ==================================================
+   ROUTE MAP
+================================================== */
 
 function RouteMapBounds({ positions }) {
   const map = useMap();
@@ -424,6 +539,9 @@ function RouteMap({ route }) {
   );
 }
 
+/* ==================================================
+   HISTORICAL ROUTE COMPARISON
+================================================== */
 
 const HISTORICAL_STATES = ["Abia", "Anambra", "Ebonyi", "Enugu", "Imo"];
 
@@ -757,6 +875,11 @@ function RouteComparison({
     </div>
   );
 }
+
+/* ==================================================
+   ROUTE PLANNER
+================================================== */
+
 function RoutePlanner() {
   const [start, setStart] = useState("");
   const [destination, setDestination] = useState("");
@@ -774,7 +897,6 @@ function RoutePlanner() {
   const [locationLoading, setLocationLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Search for starting locations
   useEffect(() => {
     if (startPoint || start.trim().length < 2) {
       setStartSuggestions([]);
@@ -805,7 +927,6 @@ function RoutePlanner() {
     };
   }, [start, startPoint]);
 
-  // Search for destination locations
   useEffect(() => {
     if (destinationPoint || destination.trim().length < 2) {
       setDestinationSuggestions([]);
@@ -1068,26 +1189,26 @@ function RoutePlanner() {
               <h4>Choose a route</h4>
 
               <div className="route-option-list">
-  {routes.map((route, index) => (
-    <button
-      type="button"
-      key={route.route_number ?? index}
-      className={`route-option ${selectedRouteIndex === index ? "active" : ""}`}
-      style={{
-        border: `2px solid ${
-          index === 0 ? "#16a34a" :
-          index === 1 ? "#dc2626" :
-          index === 2 ? "#eab308" : "#d1d5db"
-        }`
-      }}
-      onClick={() => setSelectedRouteIndex(index)}
-    >
-      <b>Route {route.route_number || index + 1}</b>
-      <span>{Number(route.distance_km).toFixed(1)} km</span>
-      <span>{Math.round(route.duration_minutes)} min</span>
-    </button>
-  ))}
-</div>
+                {routes.map((route, index) => (
+                  <button
+                    type="button"
+                    key={route.route_number ?? index}
+                    className={`route-option ${selectedRouteIndex === index ? "active" : ""}`}
+                    style={{
+                      border: `2px solid ${
+                        index === 0 ? "#16a34a" :
+                        index === 1 ? "#dc2626" :
+                        index === 2 ? "#eab308" : "#d1d5db"
+                      }`
+                    }}
+                    onClick={() => setSelectedRouteIndex(index)}
+                  >
+                    <b>Route {route.route_number || index + 1}</b>
+                    <span>{Number(route.distance_km).toFixed(1)} km</span>
+                    <span>{Math.round(route.duration_minutes)} min</span>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 
@@ -1116,14 +1237,13 @@ function RoutePlanner() {
             </ol>
           </div>
 
-
           <div className="route-notice">
             <ShieldCheck/>
             <div>
               <b>About these route results</b>
               <p>
                 Driving directions are estimated from OpenStreetMap.
-                Travel times do not include live traffic. 
+                Travel times do not include live traffic.
               </p>
             </div>
           </div>
@@ -1146,34 +1266,98 @@ function RoutePlanner() {
   );
 }
 
+/* ==================================================
+   ALERTS & UPDATES
+================================================== */
+
 function AlertsPage() {
+  const {
+    reports,
+    loading,
+    error,
+    refreshReports
+  } = useCommunityReports();
+
   return (
     <div className="panel page-panel">
       <SectionTitle
         title="Alerts & Updates"
-        subtitle="Stay informed about road incidents and safety notices."
-        action={<button className="btn-outline"><Filter size={16}/> Filter</button>}
+        subtitle="Stay informed about community-reported road incidents and safety notices."
+        action={
+          <button className="btn-outline" onClick={refreshReports}>
+            <Activity size={16}/> Refresh
+          </button>
+        }
       />
 
-      {incidents.map((item,i) => (
-        <div className="incident-row" key={i}>
-          <div className="incident-symbol"><Bell size={18}/></div>
-          <div className="incident-info">
-            <strong>{item.type}</strong>
-            <span><MapPin size={13}/> {item.location}</span>
-            <small>{item.time}</small>
-          </div>
-          <span className={`status-pill ${item.status === "Verified" ? "verified" : "review"}`}>
-            {item.status}
-          </span>
-        </div>
-      ))}
+      {loading && (
+        <p className="demo-note">Loading community reports...</p>
+      )}
 
-      <p className="demo-note">Sample content only. Real-time alerts are not connected yet.</p>
+      {error && (
+        <p className="demo-note">{error}</p>
+      )}
+
+      {!loading && !error && reports.length === 0 && (
+        <div className="empty-state">
+          <Bell size={42}/>
+          <h3>No active road reports</h3>
+          <p>Community reports will appear here when submitted.</p>
+        </div>
+      )}
+
+      {reports.map(report => {
+        const isVerified =
+          report.verification_status === "Verified";
+
+        return (
+          <div className="incident-row" key={report.id}>
+            <div className="incident-symbol">
+              <Bell size={18}/>
+            </div>
+
+            <div className="incident-info">
+              <strong>{report.incident_type}</strong>
+
+              <span>
+                <MapPin size={13}/> {report.location_route}
+              </span>
+
+              <small>
+                {report.state} • {report.incident_date}
+                {report.incident_time
+                  ? ` • ${report.incident_time}`
+                  : ""}
+              </small>
+
+              <small>
+                Severity: {report.severity || "Unknown"}
+              </small>
+
+              {report.description && (
+                <small>{report.description}</small>
+              )}
+            </div>
+
+            <span className={`status-pill ${isVerified ? "verified" : "review"}`}>
+              {isVerified ? "Verified" : "Under review"}
+            </span>
+          </div>
+        );
+      })}
+
+      <p className="demo-note">
+        Reports awaiting verification are labelled Under review.
+        Only verified reports have been approved by a moderator.
+        Rejected reports are not displayed in this feed.
+      </p>
     </div>
   );
 }
 
+/* ==================================================
+   SOS
+================================================== */
 
 function SosPage() {
   const [showOptions, setShowOptions] = useState(false);
@@ -1244,6 +1428,10 @@ function SosPage() {
     </div>
   );
 }
+
+/* ==================================================
+   REPORT INCIDENT
+================================================== */
 
 function ReportPage() {
   const [type,setType] = useState("Road accident");
@@ -1329,7 +1517,9 @@ function ReportPage() {
         throw new Error(result.detail || "The report could not be submitted.");
       }
 
-      setMessage("Your incident report was submitted successfully and is pending verification.");
+      setMessage(
+        `Your incident report (#${result.report_id}) was submitted successfully and is pending verification.`
+      );
 
       setType("Road accident");
       setState("Abia");
@@ -1472,6 +1662,10 @@ function ReportPage() {
     </div>
   );
 }
+
+/* ==================================================
+   VERIFICATION CENTRE
+================================================== */
 
 function VerificationPage() {
   const [reports,setReports] = useState([]);
@@ -1616,6 +1810,9 @@ function VerificationPage() {
   );
 }
 
+/* ==================================================
+   PROFILE
+================================================== */
 
 function ProfilePage() {
   const [name, setName] = useState(
@@ -1646,7 +1843,7 @@ function ProfilePage() {
   );
   const [safetyUpdates, setSafetyUpdates] = useState(
     () => localStorage.getItem("iwakasafe_safety_updates") !== "false"
-  );    
+  );
 
   function saveProfile() {
     if (!name.trim()) {
@@ -1687,33 +1884,6 @@ function ProfilePage() {
     setter(value);
     localStorage.setItem(key, String(value));
   }
-
-  const plans = [
-    {
-      name: "Free",
-      monthly: "₦0",
-      yearly: "₦0",
-      description: "Essential road safety information.",
-      features: [
-        "Access to road safety map",
-        "Basic route planning",
-        "Community incident reporting",
-        "Emergency SOS access"
-      ]
-    },
-    {
-      name: "Premium",
-      monthly: "₦2,000",
-      yearly: "₦20,000",
-      description: "Enhanced road safety information and insights.",
-      features: [
-        "All Free plan features",
-        "Advanced historical route insights",
-        "Enhanced journey information",
-        "Priority safety updates"
-      ]
-    }
-  ];
 
   return (
     <div className="panel page-panel">
@@ -1814,7 +1984,7 @@ function ProfilePage() {
             checked={browserNotifications}
             onChange={e =>
               saveNotificationPreference(
-                "wakasafe_browser_notifications",
+                "iwakasafe_browser_notifications",
                 e.target.checked,
                 setBrowserNotifications
               )
@@ -1859,35 +2029,36 @@ function ProfilePage() {
       </div>
 
       <div className="form-card">
-  <h3>IwakaSafe Premium</h3>
-  <p>Get access to enhanced road safety features and insights.</p>
+        <h3>IwakaSafe Premium</h3>
+        <p>Get access to enhanced road safety features and insights.</p>
 
-  <button
-    type="button"
-    className="btn-primary"
-    onClick={() => setShowPremiumPlans(value => !value)}
-  >
-    {showPremiumPlans ? "Close plans" : "Upgrade plan"}
-  </button>
+        <button
+          type="button"
+          className="btn-primary"
+          onClick={() => setShowPremiumPlans(value => !value)}
+        >
+          {showPremiumPlans ? "Close plans" : "Upgrade plan"}
+        </button>
 
-  {showPremiumPlans && (
-    <div className="feature-grid">
-      <div className="feature-card">
-        <h3>Monthly Plan</h3>
-        <h2>₦15,000 <small>/month</small></h2>
+        {showPremiumPlans && (
+          <div className="feature-grid">
+            <div className="feature-card">
+              <h3>Monthly Plan</h3>
+              <h2>₦15,000 <small>/month</small></h2>
+            </div>
+
+            <div className="feature-card">
+              <h3>Yearly Plan</h3>
+              <h2>₦150,000 <small>/year</small></h2>
+            </div>
+          </div>
+        )}
+
+        <p className="demo-note">
+          Subscription payment and activation are not available yet.
+        </p>
       </div>
 
-      <div className="feature-card">
-        <h3>Yearly Plan</h3>
-        <h2>₦150,000 <small>/year</small></h2>
-      </div>
-    </div>
-  )}
-
-  <p className="demo-note">
-    Subscription payment and activation are not available yet.
-  </p>
-</div>
       <div className="form-card">
         <h3>Account security</h3>
         <p>Password management will be available when user authentication is implemented.</p>
@@ -1899,10 +2070,15 @@ function ProfilePage() {
   );
 }
 
+/* ==================================================
+   LOGISTICS
+================================================== */
+
 function LogisticsPage() {
   return (
     <div className="panel page-panel">
       <SectionTitle title="Logistics" subtitle="Tools planned for fleet operators, delivery teams and professional drivers."/>
+
       <div className="feature-grid">
         <div className="feature-card"><Truck/><h3>Fleet overview</h3><p>Monitor registered vehicles and journey activity.</p></div>
         <div className="feature-card"><Route/><h3>Journey planning</h3><p>Plan journeys with road-risk information.</p></div>
@@ -1913,10 +2089,15 @@ function LogisticsPage() {
   );
 }
 
+/* ==================================================
+   MODERATOR
+================================================== */
+
 function ModeratorPage() {
   return (
     <div className="panel page-panel">
       <SectionTitle title="Moderator Dashboard" subtitle="Tools for reviewing reports and maintaining platform quality."/>
+
       <div className="feature-grid">
         <div className="feature-card"><ClipboardCheck/><h3>Review reports</h3><p>Inspect new submissions and supporting evidence.</p></div>
         <div className="feature-card"><ShieldCheck/><h3>Verify incidents</h3><p>Approve, reject or request more information.</p></div>
@@ -1927,12 +2108,16 @@ function ModeratorPage() {
   );
 }
 
+/* ==================================================
+   MAIN APPLICATION
+================================================== */
+
 export default function App() {
   const [active,setActive] = useState("Dashboard");
   const [dark,setDark] = useState(false);
   const [mobileOpen,setMobileOpen] = useState(false);
   const [summary,setSummary] = useState(null);
-  
+
   const [profileName, setProfileName] = useState(
     () => localStorage.getItem("iwakasafe_profile_name") || "IwakaSafe User"
   );
@@ -2036,16 +2221,16 @@ export default function App() {
           </div>
 
           <div className="sidebar-user">
-  <div className="user-avatar">
-    {profileName.charAt(0).toUpperCase()}
-  </div>
-  <div>
-    <b>{profileName}</b>
-    <small>Preview account</small>
-  </div>
-</div>
-</div>
-</aside>
+            <div className="user-avatar">
+              {profileName.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <b>{profileName}</b>
+              <small>Preview account</small>
+            </div>
+          </div>
+        </div>
+      </aside>
 
       <main className="main-area">
         <header className="topbar">
@@ -2088,26 +2273,26 @@ export default function App() {
             </button>
 
             <button
-  type="button"
-  onClick={() => navigate("My Profile")}
-  title="Open My Profile"
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    border: "none",
-    background: "transparent",
-    cursor: "pointer",
-    padding: "5px"
-  }}
->
-  <div className="top-avatar">
-   {profileName.charAt(0).toUpperCase()}
-  </div>
-  <span style={{ fontWeight: 600 }}>
-    {profileName}
-  </span>
-</button>
+              type="button"
+              onClick={() => navigate("My Profile")}
+              title="Open My Profile"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                padding: "5px"
+              }}
+            >
+              <div className="top-avatar">
+                {profileName.charAt(0).toUpperCase()}
+              </div>
+              <span style={{ fontWeight: 600 }}>
+                {profileName}
+              </span>
+            </button>
           </div>
         </header>
 
@@ -2117,11 +2302,9 @@ export default function App() {
           <span>© 2026 IwakaSafe. Safer journeys through better information.</span>
           <span>Development preview</span>
         </footer>
-            </main>
+      </main>
 
       <SosPage />
-
     </div>
   );
 }
-  
