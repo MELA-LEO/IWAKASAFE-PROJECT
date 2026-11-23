@@ -14,7 +14,7 @@ import {
   useMap, Polyline
 } from "react-leaflet";
 
-const API_BASE = "https://wakasafe-project.onrender.com";
+const API_BASE = "http://127.0.0.1:8000";
 
 const navigation = [
   { name: "Dashboard", icon: LayoutDashboard },
@@ -629,7 +629,7 @@ function RouteComparison({
       <h3>Compare available routes</h3>
 
       <p>
-        WakaSafe compares historical incident activity for each route.
+        IwakaSafe compares historical incident activity for each route.
         It does not measure live road conditions.
       </p>
 
@@ -1136,7 +1136,7 @@ function RoutePlanner() {
           <div>
             <b>Risk-aware route planning</b>
             <p>
-              WakaSafe is being designed to consider reported incidents,
+              IwakaSafe is being designed to consider reported incidents,
               historical risk patterns and available road information.
             </p>
           </div>
@@ -1181,8 +1181,8 @@ function SosPage() {
   const [contactPhone, setContactPhone] = useState("");
 
   function toggleOptions() {
-    const savedName = localStorage.getItem("wakasafe_sos_contact_name") || "";
-    const savedPhone = localStorage.getItem("wakasafe_sos_contact_phone") || "";
+    const savedName = localStorage.getItem("iwakasafe_sos_contact_name") || "";
+    const savedPhone = localStorage.getItem("iwakasafe_sos_contact_phone") || "";
 
     setContactName(savedName);
     setContactPhone(savedPhone);
@@ -1341,7 +1341,7 @@ function ReportPage() {
       setCoordinates(null);
 
     } catch (err) {
-      setMessage(err.message || "Unable to submit your report. Check that the WakaSafe backend is running.");
+      setMessage(err.message || "Unable to submit your report. Check that the IwakaSafe backend is running.");
     } finally {
       setSubmitting(false);
     }
@@ -1496,7 +1496,7 @@ function VerificationPage() {
       setReports(data.reports || []);
 
     } catch (err) {
-      setMessage(err.message || "Could not connect to WakaSafe backend.");
+      setMessage(err.message || "Could not connect to IwakaSafe backend.");
     } finally {
       setLoading(false);
     }
@@ -1619,19 +1619,19 @@ function VerificationPage() {
 
 function ProfilePage() {
   const [name, setName] = useState(
-    () => localStorage.getItem("wakasafe_profile_name") || ""
+    () => localStorage.getItem("iwakasafe_profile_name") || ""
   );
   const [email, setEmail] = useState(
-    () => localStorage.getItem("wakasafe_profile_email") || ""
+    () => localStorage.getItem("iwakasafe_profile_email") || ""
   );
   const [phone, setPhone] = useState(
-    () => localStorage.getItem("wakasafe_profile_phone") || ""
+    () => localStorage.getItem("iwakasafe_profile_phone") || ""
   );
   const [contactName, setContactName] = useState(
-    () => localStorage.getItem("wakasafe_sos_contact_name") || ""
+    () => localStorage.getItem("iwakasafe_sos_contact_name") || ""
   );
   const [contactPhone, setContactPhone] = useState(
-    () => localStorage.getItem("wakasafe_sos_contact_phone") || ""
+    () => localStorage.getItem("iwakasafe_sos_contact_phone") || ""
   );
 
   const [editingProfile, setEditingProfile] = useState(false);
@@ -1639,14 +1639,14 @@ function ProfilePage() {
   const [contactMessage, setContactMessage] = useState("");
   const [showPremiumPlans, setShowPremiumPlans] = useState(false);
   const [browserNotifications, setBrowserNotifications] = useState(
-    () => localStorage.getItem("wakasafe_browser_notifications") === "true"
+    () => localStorage.getItem("iwakasafe_browser_notifications") === "true"
   );
   const [incidentAlerts, setIncidentAlerts] = useState(
-    () => localStorage.getItem("wakasafe_incident_alerts") !== "false"
+    () => localStorage.getItem("iwakasafe_incident_alerts") !== "false"
   );
   const [safetyUpdates, setSafetyUpdates] = useState(
-    () => localStorage.getItem("wakasafe_safety_updates") !== "false"
-  );
+    () => localStorage.getItem("iwakasafe_safety_updates") !== "false"
+  );    
 
   function saveProfile() {
     if (!name.trim()) {
@@ -1654,11 +1654,11 @@ function ProfilePage() {
       return;
     }
 
-    localStorage.setItem("wakasafe_profile_name", name.trim());
-    localStorage.setItem("wakasafe_profile_email", email.trim());
-    localStorage.setItem("wakasafe_profile_phone", phone.trim());
+    localStorage.setItem("iwakasafe_profile_name", name.trim());
+    localStorage.setItem("iwakasafe_profile_email", email.trim());
+    localStorage.setItem("iwakasafe_profile_phone", phone.trim());
 
-    window.dispatchEvent(new Event("wakasafe-profile-updated"));
+    window.dispatchEvent(new Event("iwakasafe-profile-updated"));
     setEditingProfile(false);
     setMessage("Personal details saved.");
   }
@@ -1669,15 +1669,15 @@ function ProfilePage() {
       return;
     }
 
-    localStorage.setItem("wakasafe_sos_contact_name", contactName.trim());
-    localStorage.setItem("wakasafe_sos_contact_phone", contactPhone.trim());
+    localStorage.setItem("iwakasafe_sos_contact_name", contactName.trim());
+    localStorage.setItem("iwakasafe_sos_contact_phone", contactPhone.trim());
 
     setContactMessage("Emergency contact saved.");
   }
 
   function removeEmergencyContact() {
-    localStorage.removeItem("wakasafe_sos_contact_name");
-    localStorage.removeItem("wakasafe_sos_contact_phone");
+    localStorage.removeItem("iwakasafe_sos_contact_name");
+    localStorage.removeItem("iwakasafe_sos_contact_phone");
     setContactName("");
     setContactPhone("");
     setContactMessage("Emergency contact removed.");
@@ -1829,7 +1829,7 @@ function ProfilePage() {
             checked={incidentAlerts}
             onChange={e =>
               saveNotificationPreference(
-                "wakasafe_incident_alerts",
+                "iwakasafe_incident_alerts",
                 e.target.checked,
                 setIncidentAlerts
               )
@@ -1844,7 +1844,7 @@ function ProfilePage() {
             checked={safetyUpdates}
             onChange={e =>
               saveNotificationPreference(
-                "wakasafe_safety_updates",
+                "iwakasafe_safety_updates",
                 e.target.checked,
                 setSafetyUpdates
               )
@@ -1859,7 +1859,7 @@ function ProfilePage() {
       </div>
 
       <div className="form-card">
-  <h3>WakaSafe Premium</h3>
+  <h3>IwakaSafe Premium</h3>
   <p>Get access to enhanced road safety features and insights.</p>
 
   <button
@@ -1934,20 +1934,20 @@ export default function App() {
   const [summary,setSummary] = useState(null);
   
   const [profileName, setProfileName] = useState(
-    () => localStorage.getItem("wakasafe_profile_name") || "WakaSafe User"
+    () => localStorage.getItem("iwakasafe_profile_name") || "IwakaSafe User"
   );
 
   useEffect(() => {
     const updateProfileName = () => {
       setProfileName(
-        localStorage.getItem("wakasafe_profile_name") || "WakaSafe User"
+        localStorage.getItem("iwakasafe_profile_name") || "IwakaSafe User"
       );
     };
 
-    window.addEventListener("wakasafe-profile-updated", updateProfileName);
+    window.addEventListener("iwakasafe-profile-updated", updateProfileName);
 
     return () => {
-      window.removeEventListener("wakasafe-profile-updated", updateProfileName);
+      window.removeEventListener("iwakasafe-profile-updated", updateProfileName);
     };
   }, []);
 
@@ -1966,7 +1966,7 @@ export default function App() {
       .then(data => setSummary(data))
       .catch(err => {
         if (err.name !== "AbortError") {
-          console.error("WakaSafe API error:",err);
+          console.error("iwakasafe API error:",err);
         }
       });
 
@@ -1999,7 +1999,7 @@ export default function App() {
       <aside className={`sidebar ${mobileOpen ? "sidebar-open" : ""}`}>
         <div className="brand">
           <div className="brand-mark"><ShieldCheck size={23}/></div>
-          <div><strong>WakaSafe</strong><small>SAFER JOURNEYS</small></div>
+          <div><strong>iwakasafe</strong><small>SAFER JOURNEYS</small></div>
           <button className="mobile-close" onClick={() => setMobileOpen(false)}>
             <X/>
           </button>
@@ -2029,7 +2029,7 @@ export default function App() {
           <div className="help-card">
             <div className="help-icon"><LifeBuoy size={19}/></div>
             <b>Need assistance?</b>
-            <p>Find help using WakaSafe.</p>
+            <p>Find help using IwakaSafe.</p>
             <button onClick={() => alert("Help centre content will be added.")}>
               Help centre <ArrowUpRight size={14}/>
             </button>
@@ -2062,10 +2062,10 @@ export default function App() {
             <div className="search-box">
               <Search size={16}/>
               <input
-                placeholder="Search WakaSafe..."
+                placeholder="Search iwakasafe..."
                 onKeyDown={e => {
                   if (e.key === "Enter") {
-                    alert("Search will be connected to WakaSafe data.");
+                    alert("Search will be connected to IwakaSafe data.");
                   }
                 }}
               />
@@ -2114,7 +2114,7 @@ export default function App() {
         <div className="page-content">{pageContent[active]}</div>
 
         <footer className="footer">
-          <span>© 2026 WakaSafe. Safer journeys through better information.</span>
+          <span>© 2026 IwakaSafe. Safer journeys through better information.</span>
           <span>Development preview</span>
         </footer>
             </main>
