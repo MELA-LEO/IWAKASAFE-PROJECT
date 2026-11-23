@@ -1,3 +1,4 @@
+
 import joblib
 from pathlib import Path
 from typing import Optional
@@ -13,7 +14,10 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+
+# ==================================================
 # PROJECT PATHS
+# ==================================================
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 
@@ -22,8 +26,18 @@ ROADS_FILE = PROJECT_DIR / "processed" / "wakasafe_road_features_cleaned.csv"
 
 DB_FILE = Path(__file__).resolve().parent / "wakasafe.db"
 
+HISTORICAL_ACTIVITY_FILE = (
+    PROJECT_DIR / "processed" / "wakasafe_historical_time_risk.csv"
+)
 
+ACTIVITY_MODEL_FILE = (
+    PROJECT_DIR / "models" / "wakasafe_historical_activity_model.pkl"
+)
+
+
+# ==================================================
 # LOAD EXISTING WAKASAFE DATA
+# ==================================================
 
 if not RISK_FILE.exists():
     raise FileNotFoundError(f"Risk dataset not found: {RISK_FILE}")
@@ -31,28 +45,24 @@ if not RISK_FILE.exists():
 if not ROADS_FILE.exists():
     raise FileNotFoundError(f"Road features dataset not found: {ROADS_FILE}")
 
-risk_df = pd.read_csv(RISK_FILE)
-roads_df = pd.read_csv(ROADS_FILE)
-HISTORICAL_ACTIVITY_FILE = (
-    PROJECT_DIR / "processed" / "wakasafe_historical_time_risk.csv"
-)
-
-ACTIVITY_MODEL_FILE = (
-    PROJECT_DIR / "backend" / "models" / "wakasafe_historical_activity_model.pkl"
-)
-roads_df = pd.read_csv(ROADS_FILE)
-# LOAD HISTORICAL ACTIVITY MODEL
-
 if not HISTORICAL_ACTIVITY_FILE.exists():
-    raise FileNotFoundError(f"Historical activity data not found: {HISTORICAL_ACTIVITY_FILE}")
+    raise FileNotFoundError(
+        f"Historical activity data not found: {HISTORICAL_ACTIVITY_FILE}"
+    )
 
 if not ACTIVITY_MODEL_FILE.exists():
     raise FileNotFoundError(f"Activity model not found: {ACTIVITY_MODEL_FILE}")
 
+risk_df = pd.read_csv(RISK_FILE)
+roads_df = pd.read_csv(ROADS_FILE)
+
 historical_activity_df = pd.read_csv(HISTORICAL_ACTIVITY_FILE)
 activity_model = joblib.load(ACTIVITY_MODEL_FILE)
 
+
+# ==================================================
 # DATABASE
+# ==================================================
 
 def get_connection():
     connection = sqlite3.connect(DB_FILE)
@@ -62,6 +72,8 @@ def get_connection():
 
 def initialize_database():
     with get_connection() as connection:
+
+        # Create the table if it does not already exist.
         connection.execute("""
             CREATE TABLE IF NOT EXISTS community_reports (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -69,6 +81,8 @@ def initialize_database():
                 location_route TEXT NOT NULL,
                 incident_type TEXT NOT NULL,
                 incident_date TEXT NOT NULL,
+                incident_time TEXT,
+                severity TEXT NOT NULL DEFAULT 'Unknown',
                 description TEXT NOT NULL,
                 latitude REAL,
                 longitude REAL,
@@ -76,33 +90,67 @@ def initialize_database():
                 created_at TEXT NOT NULL
             )
         """)
+
+        # Check the columns in an existing database.
+        existing_columns = {
+            row["name"]
+            for row in connection.execute(
+                "PRAGMA table_info(community_reports)"
+            ).fetchall()
+        }
+
+        # Add incident_time to older databases if missing.
+        if "incident_time" not in existing_columns:
+            connection.execute("""
+                ALTER TABLE community_reports
+                ADD COLUMN incident_time TEXT
+            """)
+
+        # Add severity to older databases if missing.
+        if "severity" not in existing_columns:
+            connection.execute("""
+                ALTER TABLE community_reports
+                ADD COLUMN severity TEXT NOT NULL DEFAULT 'Unknown'
+            """)
+
         connection.commit()
 
 
 initialize_database()
 
+
+# ==================================================
 # FASTAPI APPLICATION
+# ==================================================
 
 app = FastAPI(
-    title="WakaSafe API",
+    title="IwakaSafe API",
     description="Road Safety Intelligence and Risk Assessment API",
     version="1.0.0"
 )
 
+
+# ==================================================
+# CORS CONFIGURATION
+# ==================================================
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://frontend-sage-five-22.vercel.app"
-],
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "https://iwakasafe.vercel.app",
+        "https://frontend-sage-five-22.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
 )
 
-# REPORT REQUEST MODEL
 
+# ==================================================
+# REPORT REQUEST MODEL
+# ==================================================
 
 class IncidentReport(BaseModel):
     state: str = Field(min_length=2, max_length=50)
@@ -116,13 +164,14 @@ class IncidentReport(BaseModel):
     longitude: Optional[float] = None
 
 
+# ==================================================
 # HEALTH CHECK
-
+# ==================================================
 
 @app.get("/")
 def home():
     return {
-        "message": "Welcome to WakaSafe API",
+        "message": "Welcome to IwakaSafe API",
         "status": "running",
         "version": "1.0.0"
     }
@@ -130,16 +179,26 @@ def home():
 
 @app.get("/api/health")
 def health_check():
+    try:
+        with get_connection() as connection:
+            connection.execute("SELECT 1").fetchone()
+
+        database_status = "connected"
+
+    except sqlite3.Error:
+        database_status = "disconnected"
+
     return {
         "status": "healthy",
         "risk_records": len(risk_df),
         "road_reference_records": len(roads_df),
-        "database": "connected"
+        "database": database_status
     }
 
 
+# ==================================================
 # DASHBOARD SUMMARY
-
+# ==================================================
 
 @app.get("/api/dashboard/summary")
 def dashboard_summary():
@@ -154,8 +213,9 @@ def dashboard_summary():
     }
 
 
+# ==================================================
 # HISTORICAL ROAD RISK
-
+# ==================================================
 
 @app.get("/api/road-risks")
 def get_road_risks(
@@ -188,9 +248,9 @@ def get_road_risks(
     }
 
 
-# --------------------------------------------------
+# ==================================================
 # GEOGRAPHICAL ROAD REFERENCES
-# --------------------------------------------------
+# ==================================================
 
 @app.get("/api/road-features")
 def get_road_features(
@@ -203,7 +263,6 @@ def get_road_features(
 
     result = roads_df
 
-    # Filter by map boundaries when supplied.
     bounds_supplied = all(
         value is not None
         for value in [west, south, east, north]
@@ -219,7 +278,6 @@ def get_road_features(
 
     total_matching = len(result)
 
-    # Limit map points to keep the browser responsive.
     if len(result) > limit:
         result = result.sample(
             n=limit,
@@ -250,14 +308,13 @@ def get_road_features(
     }
 
 
-
-
-# WAKASAFE LOCATION SEARCH AND ROAD ROUTING
+# ==================================================
+# LOCATION SEARCH AND ROAD ROUTING
+# ==================================================
 
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
 OSRM_URL = "https://router.project-osrm.org/route/v1/driving"
 
-# Broad geographic boundary for Southeast Nigeria.
 SE_VIEWBOX = "6.5,7.5,8.9,4.5"
 
 
@@ -266,10 +323,6 @@ def search_locations(
     q: str = Query(min_length=2, max_length=120),
     limit: int = Query(default=8, ge=1, le=10)
 ):
-    """
-    Search for places in the Southeast Nigeria region.
-    Returns coordinates for use in route planning.
-    """
 
     params = {
         "q": q + ", Nigeria",
@@ -286,7 +339,7 @@ def search_locations(
     request = Request(
         url,
         headers={
-            "User-Agent": "WakaSafe/1.0 (development route planner)",
+            "User-Agent": "IwakaSafe/1.0 (road safety application)",
             "Accept": "application/json"
         }
     )
@@ -381,10 +434,6 @@ def calculate_routes(
     end_lat: float,
     end_lon: float
 ):
-    """
-    Calculate driving routes using the OpenStreetMap road network.
-    Returns route geometry and turn-by-turn instructions.
-    """
 
     coordinates = (
         f"{start_lon},{start_lat};{end_lon},{end_lat}"
@@ -401,7 +450,7 @@ def calculate_routes(
     request = Request(
         url,
         headers={
-            "User-Agent": "WakaSafe/1.0 (development route planner)",
+            "User-Agent": "IwakaSafe/1.0 (road safety application)",
             "Accept": "application/json"
         }
     )
@@ -462,8 +511,9 @@ def calculate_routes(
         )
 
 
+# ==================================================
 # SUBMIT COMMUNITY INCIDENT REPORT
-
+# ==================================================
 
 @app.post("/api/reports")
 def submit_report(report: IncidentReport):
@@ -517,7 +567,9 @@ def submit_report(report: IncidentReport):
         )
 
 
+# ==================================================
 # VIEW COMMUNITY REPORTS
+# ==================================================
 
 @app.get("/api/reports")
 def get_reports(
@@ -548,9 +600,9 @@ def get_reports(
     }
 
 
+# ==================================================
 # COMMUNITY REPORT VERIFICATION
-
-from fastapi import HTTPException
+# ==================================================
 
 @app.patch("/api/reports/{report_id}/verification")
 def verify_report(report_id: int, status: str):
@@ -587,9 +639,11 @@ def verify_report(report_id: int, status: str):
         "report_id": report_id,
         "verification_status": status
     }
-import pandas as pd
-from pathlib import Path
-from fastapi import Query
+
+
+# ==================================================
+# HISTORICAL RISK
+# ==================================================
 
 HISTORICAL_RISK_FILE = (
     Path(__file__).resolve().parent.parent
@@ -597,14 +651,19 @@ HISTORICAL_RISK_FILE = (
     / "wakasafe_historical_time_risk.csv"
 )
 
+
 @app.get("/api/historical-risk")
 def get_historical_risk(
     state: str = Query(...),
     route: str = Query(...),
     time_of_day: str = Query(...)
 ):
+
     if not HISTORICAL_RISK_FILE.exists():
-        return {"status": "error", "message": "Historical dataset not found"}
+        return {
+            "status": "error",
+            "message": "Historical dataset not found"
+        }
 
     data = pd.read_csv(HISTORICAL_RISK_FILE)
 
@@ -628,12 +687,20 @@ def get_historical_risk(
         "route": record["Location_Route"],
         "time_of_day": record["Time_of_Day"],
         "incident_count": int(record["Incident_Count"]),
-        "historical_activity_score": float(record["Historical_Activity_Score"]),
-        "historical_activity_level": str(record["Historical_Activity_Level"]),
+        "historical_activity_score": float(
+            record["Historical_Activity_Score"]
+        ),
+        "historical_activity_level": str(
+            record["Historical_Activity_Level"]
+        ),
         "total_fatalities": int(record["Total_Fatalities"]),
         "total_injuries": int(record["Total_Injuries"])
     }
-    # HISTORICAL ACTIVITY PREDICTION
+
+
+# ==================================================
+# HISTORICAL ACTIVITY PREDICTION
+# ==================================================
 
 @app.get("/api/predict-historical-activity")
 def predict_historical_activity(
@@ -641,17 +708,38 @@ def predict_historical_activity(
     route: str = Query(...),
     time_of_day: str = Query(...)
 ):
-    # Check whether this route and time exist in historical records
+
     match = historical_activity_df[
-        (historical_activity_df["State"].astype(str).str.strip().str.casefold() == state.strip().casefold()) &
-        (historical_activity_df["Location_Route"].astype(str).str.strip().str.casefold() == route.strip().casefold()) &
-        (historical_activity_df["Time_of_Day"].astype(str).str.strip().str.casefold() == time_of_day.strip().casefold())
+        (
+            historical_activity_df["State"]
+            .astype(str)
+            .str.strip()
+            .str.casefold()
+            == state.strip().casefold()
+        ) &
+        (
+            historical_activity_df["Location_Route"]
+            .astype(str)
+            .str.strip()
+            .str.casefold()
+            == route.strip().casefold()
+        ) &
+        (
+            historical_activity_df["Time_of_Day"]
+            .astype(str)
+            .str.strip()
+            .str.casefold()
+            == time_of_day.strip().casefold()
+        )
     ]
 
     if match.empty:
         return {
             "status": "insufficient_historical_data",
-            "message": "No matching historical records are available for this route and time.",
+            "message": (
+                "No matching historical records are available "
+                "for this route and time."
+            ),
             "state": state,
             "route": route,
             "time_of_day": time_of_day
@@ -677,6 +765,12 @@ def predict_historical_activity(
         "predicted_activity_level": str(predicted_level),
         "model_confidence": round(confidence, 2),
         "recorded_incidents": int(record["Incident_Count"]),
-        "historical_activity_score": float(record["Historical_Activity_Score"]),
-        "explanation": "This is an experimental classification of historical incident activity, not a guarantee of current road safety or a probability of an incident."
+        "historical_activity_score": float(
+            record["Historical_Activity_Score"]
+        ),
+        "explanation": (
+            "This is an experimental classification of historical "
+            "incident activity, not a guarantee of current road safety "
+            "or a probability of an incident."
+        )
     }
